@@ -18,7 +18,7 @@ defmodule IssuesLeaderboard.Mixfile do
   def application do
     [mod: {IssuesLeaderboard, []},
      applications: [:phoenix, :phoenix_html, :cowboy, :logger,
-                    :phoenix_ecto, :postgrex]]
+                    :phoenix_ecto, :postgrex, :tzdata]]
   end
 
   # Specifies which paths to compile per environment
@@ -34,6 +34,8 @@ defmodule IssuesLeaderboard.Mixfile do
      {:postgrex, ">= 0.0.0"},
      {:phoenix_html, "~> 2.1"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},
-     {:cowboy, "~> 1.0"}]
+     {:cowboy, "~> 1.0"},
+     {:tentacat, github: "edgurgel/tentacat"},
+     {:timex, "~> 0.18.0"}]
   end
 end

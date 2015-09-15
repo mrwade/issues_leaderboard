@@ -2,7 +2,7 @@ defmodule IssuesLeaderboard.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "rooms:*", IssuesLeaderboard.RoomChannel
+  channel "boards:default", IssuesLeaderboard.BoardChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
