@@ -12,7 +12,9 @@ config :issues_leaderboard, IssuesLeaderboard.Endpoint,
   code_reloader: true,
   cache_static_lookup: false,
   check_origin: false,
-  watchers: [node: ["node_modules/brunch/bin/brunch", "watch", "--stdin"]]
+  watchers: [{Path.expand("node_modules/webpack/bin/webpack.js"),
+    ["--watch", "--watch-stdin", "--colors", "--progress"]}]
+
 
 # Watch static and templates for browser reloading.
 config :issues_leaderboard, IssuesLeaderboard.Endpoint,
