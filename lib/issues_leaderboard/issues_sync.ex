@@ -2,19 +2,6 @@ defmodule IssuesLeaderboard.IssuesSync do
   use Timex
 
   @access_token System.get_env("GITHUB_TOKEN")
-  @interval 60_000
-
-  def start(after_date) do
-    run(after_date)
-  end
-
-  def run(after_date) do
-    issues = issues(after_date)
-    IssuesLeaderboard.Endpoint.broadcast! "boards:default", "issues",
-      %{issues: issues}
-    :timer.sleep(@interval)
-    run(after_date)
-  end
 
   def issues(after_date) do
     fetch_issues(after_date) |> Enum.map(&serialize_issue/1)
