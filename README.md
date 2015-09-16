@@ -21,5 +21,5 @@ IssuesLeaderboard.IssuesSync.issues(after_date)
 **Fetch and Broadcast issues at interval**
 ```elixir
 after_date = "2015-09-14T05:00:00Z"
-IssuesLeaderboard.IssuesSync.start(after_date)
+IssuesLeaderboard.Leaderboard.start(after_date)
 ```

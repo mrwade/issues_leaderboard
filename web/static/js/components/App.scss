@@ -1,0 +1,48 @@
+:global html, :global body {
+  margin: 0;
+  padding: 0;
+}
+
+:global body {
+  background: #333;
+  color: #eee;
+}
+
+.ranking {
+  display: flex;
+  align-items: center;
+  margin: 15px;
+}
+
+.rank {
+  font-size: 30px;
+  margin: 5px;
+}
+
+.avatar img {
+  $size: 80px;
+  border-radius: $size / 2;
+  height: $size;
+  margin: 0 15px;
+  width: $size;
+}
+
+.points {
+  flex: 1;
+}
+
+.issue {
+  background: #555;
+  border-radius: 10px;
+  display: inline-block;
+  font-size: 50px;
+  margin: 7px;
+  padding: 0 15px;
+}
+
+.pointValue6 { background: #E41813; }
+.pointValue5 { background: #E41813; }
+.pointValue4 { background: #E41813; }
+.pointValue3 { background: #FCCB00; color: #332900; }
+.pointValue2 { background: #006B76; }
+.pointValue1 { background: #157AE8; }

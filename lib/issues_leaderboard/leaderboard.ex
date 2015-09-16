@@ -1,5 +1,5 @@
 defmodule IssuesLeaderboard.Leaderboard do
-  @interval 60_000
+  @interval 15_000
 
   def start(after_date) do
     spawn(fn -> run_and_schedule(after_date) end)
