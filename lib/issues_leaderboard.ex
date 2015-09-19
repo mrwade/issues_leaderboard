@@ -12,7 +12,7 @@ defmodule IssuesLeaderboard do
       # Start the Ecto repository
       worker(IssuesLeaderboard.Repo, []),
       # Here you could define other workers and supervisors as children
-      # worker(IssuesLeaderboard.Worker, [arg1, arg2, arg3]),
+      worker(IssuesLeaderboard.Leaderboard, ["2015-09-10T00:00:00Z"]),
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html

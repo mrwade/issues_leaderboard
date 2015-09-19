@@ -1,8 +1,11 @@
 defmodule IssuesLeaderboard.Leaderboard do
+  use GenServer
+
   @interval 15_000
 
-  def start(after_date) do
+  def start_link(after_date) do
     spawn(fn -> run_and_schedule(after_date) end)
+    GenServer.start_link(__MODULE__, nil, name: __MODULE__)
   end
 
   def run_and_schedule(after_date) do

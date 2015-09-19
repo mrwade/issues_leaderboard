@@ -2,6 +2,7 @@ defmodule IssuesLeaderboard.IssuesSync do
   use Timex
 
   @access_token System.get_env("GITHUB_TOKEN")
+  @repo System.get_env("GITHUB_REPO")
 
   def issues(after_date) do
     fetch_issues(after_date) |> Enum.map(&serialize_issue/1)
@@ -13,7 +14,7 @@ defmodule IssuesLeaderboard.IssuesSync do
   end
 
   defp fetch_issues(after_date) do
-    Tentacat.get("repos/orgsync/orgsync/issues", client,
+    Tentacat.get("repos/#{@repo}/issues", client,
       [labels: "bug", state: "closed", since: after_date])
     |> Stream.filter(fn issue ->
          DateFormat.parse(issue["closed_at"], "{ISO}") >=
