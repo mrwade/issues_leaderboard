@@ -17,8 +17,8 @@ defmodule IssuesLeaderboard.Mixfile do
   # Type `mix help compile.app` for more information
   def application do
     [mod: {IssuesLeaderboard, []},
-     applications: [:phoenix, :phoenix_html, :cowboy, :logger,
-                    :phoenix_ecto, :postgrex, :tzdata]]
+     applications: [:cowboy, :httpoison, :logger, :phoenix, :phoenix_ecto,
+                    :phoenix_html, :postgrex, :tentacat, :tzdata]]
   end
 
   # Specifies which paths to compile per environment
@@ -29,12 +29,13 @@ defmodule IssuesLeaderboard.Mixfile do
   #
   # Type `mix help deps` for examples and options
   defp deps do
-    [{:phoenix, "~> 1.0.2"},
+    [{:cowboy, "~> 1.0"},
+     {:httpoison, "~> 0.7.3"},
+     {:phoenix, "~> 1.0.2"},
      {:phoenix_ecto, "~> 1.1"},
-     {:postgrex, ">= 0.0.0"},
      {:phoenix_html, "~> 2.1"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},
-     {:cowboy, "~> 1.0"},
+     {:postgrex, ">= 0.0.0"},
      {:tentacat, github: "edgurgel/tentacat"},
      {:timex, "~> 0.18.0"}]
   end

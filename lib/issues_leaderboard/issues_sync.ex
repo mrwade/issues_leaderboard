@@ -1,7 +1,7 @@
 defmodule IssuesLeaderboard.IssuesSync do
   use Timex
 
-  @access_token System.get_env("GITHUB_TOKEN")
+  @access_token System.get_env("GITHUB_KEY")
   @repo System.get_env("GITHUB_REPO")
 
   def issues(after_date) do
@@ -9,7 +9,6 @@ defmodule IssuesLeaderboard.IssuesSync do
   end
 
   defp client do
-    Tentacat.start
     Tentacat.Client.new(%{access_token: @access_token })
   end
 
