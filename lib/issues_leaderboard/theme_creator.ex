@@ -1,7 +1,6 @@
 defmodule IssuesLeaderboard.ThemeCreator do
   require Logger
 
-  @api_key System.get_env("YOUTUBE_KEY")
   @url_base "https://www.googleapis.com/youtube/v3"
   @max_page_size 50
 
@@ -93,9 +92,13 @@ defmodule IssuesLeaderboard.ThemeCreator do
   end
   defp get(url, query, num_results, results, pageToken) when num_results > 0 do
     maxResults = Enum.min([num_results, @max_page_size])
+    default_query = %{
+      key: System.get_env("YOUTUBE_KEY"),
+      maxResults: maxResults,
+      pageToken: pageToken}
 
     url_query = query
-    |> Map.merge(%{key: @api_key, maxResults: maxResults, pageToken: pageToken})
+    |> Map.merge(default_query)
     |> URI.encode_query
     result = HTTPoison.get!("#{url}?#{url_query}").body |> Poison.decode!
 
