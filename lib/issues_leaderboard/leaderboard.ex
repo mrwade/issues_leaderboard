@@ -1,4 +1,5 @@
 defmodule IssuesLeaderboard.Leaderboard do
+  require Logger
   use GenServer
 
   @interval 15_000
@@ -15,7 +16,7 @@ defmodule IssuesLeaderboard.Leaderboard do
   def run_and_schedule(after_date) do
     rankings = run(after_date)
     leader = rankings |> List.first |> get_in([:user, :username])
-    IO.puts "Leaderboard: Generated rankings. Current leader: #{leader}"
+    Logger.info("Leaderboard: Generated rankings. Current leader: #{leader}")
 
     IssuesLeaderboard.Endpoint.broadcast! "boards:default", "rankings",
       %{rankings: rankings}

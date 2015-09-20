@@ -1,4 +1,6 @@
 defmodule IssuesLeaderboard.ThemeCreator do
+  require Logger
+
   @api_key System.get_env("YOUTUBE_KEY")
   @url_base "https://www.googleapis.com/youtube/v3"
   @max_page_size 50
@@ -21,7 +23,7 @@ defmodule IssuesLeaderboard.ThemeCreator do
     |> get_videos
     |> filter_short_videos
 
-    IO.puts "ThemeCreator: Fetched #{length(videos)} videos for \"#{query}\""
+    Logger.info "ThemeCreator: Fetched #{length(videos)} videos for \"#{query}\""
     videos
   end
 
