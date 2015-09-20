@@ -14,11 +14,10 @@ defmodule IssuesLeaderboard.ThemeCreator do
     get(@url_base <> "/search", %{
       part: "id",
       type: "video",
-      maxResults: @max_page_size,
       videoDuration: "short",
       videoEmbeddable: "true",
       q: query
-    }, 10)
+    }, 500)
   end
 
   defp video_ids(api_result) do
@@ -33,8 +32,7 @@ defmodule IssuesLeaderboard.ThemeCreator do
     |> Enum.flat_map(fn ids ->
          get(@url_base <> "/videos", %{
            id: Enum.join(ids, ","),
-           part: "id,snippet,contentDetails",
-           maxResults: @max_page_size
+           part: "id,snippet,contentDetails"
          })
        end)
   end
@@ -58,22 +56,21 @@ defmodule IssuesLeaderboard.ThemeCreator do
        end)
   end
 
-  defp get(url, query) do
-    get(url, query, 1)
-  end
-  defp get(url, query, num_pages) do
-    get(url, query, num_pages, [], nil)
+  defp get(url, query, num_results \\ @max_page_size) do
+    get(url, query, num_results, [], nil)
   end
   defp get(_url, _query, 0, results, _pageToken) do
     results
   end
-  defp get(url, query, num_pages, results, pageToken) do
-    url_query = query
-    |> Map.merge(%{key: @api_key, pageToken: pageToken})
-    |> URI.encode_query
+  defp get(url, query, num_results, results, pageToken) when num_results > 0 do
+    maxResults = Enum.min([num_results, @max_page_size])
 
+    url_query = query
+    |> Map.merge(%{key: @api_key, maxResults: maxResults, pageToken: pageToken})
+    |> URI.encode_query
     result = HTTPoison.get!("#{url}?#{url_query}").body |> Poison.decode!
-    items = result["items"]
-    get(url, query, num_pages - 1, results ++ items, result["nextPageToken"])
+
+    get(url, query, num_results - maxResults, results ++ result["items"],
+      result["nextPageToken"])
   end
 end
