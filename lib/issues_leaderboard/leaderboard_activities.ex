@@ -12,7 +12,7 @@ defmodule IssuesLeaderboard.LeaderboardActivities do
   iex> IssuesLeaderboard.LeaderboardActivities.activities(
          [%{user: %{username: "mrwade"}, total: 4}],
          [%{user: %{username: "mrwade"}, total: 6}])
-  [{:points_scored, %{user: %{username: "mrwade", scored: 2}}}
+  [{:points_scored, %{user: %{username: "mrwade", points: 2}}}
   """
   def activities(a, b) do
     users = users_lookup(a, b)
@@ -20,7 +20,9 @@ defmodule IssuesLeaderboard.LeaderboardActivities do
   end
 
   def serialize(activities) do
-    Enum.map(activities, fn {type, data} -> Dict.put(data, :type, type) end)
+    Enum.map(activities, fn {type, data, video} ->
+      Map.merge(data, %{type: type, video: video})
+    end)
   end
 
   @doc """
@@ -49,9 +51,10 @@ defmodule IssuesLeaderboard.LeaderboardActivities do
       Enum.into(a_totals, HashSet.new))
     |> Stream.filter(fn {username, _} -> Enum.member?(a_usernames, username) end)
     |> Enum.map(fn {username, b_total} ->
-         {:points_scored, %{
-            user: users[username],
-            scored: b_total - a_totals[username]}}
+         {:points_scored,
+          %{user: users[username],
+            points: b_total - a_totals[username]},
+          IssuesLeaderboard.ThemeCreator.get_random_video}
        end)
   end
   defp total_points_by_user(rankings) do

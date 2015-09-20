@@ -15,6 +15,11 @@ defmodule IssuesLeaderboard.ThemeCreator do
     Agent.get(__MODULE__, &(&1))
   end
 
+  def get_random_video do
+    videos = get_videos
+    Enum.at(videos, :random.uniform(length(videos))-1)
+  end
+
   # Implementation
 
   def find_videos(query) do
@@ -22,6 +27,7 @@ defmodule IssuesLeaderboard.ThemeCreator do
     |> video_ids
     |> get_videos
     |> filter_short_videos
+    |> Enum.map(&serialize/1)
 
     Logger.info "ThemeCreator: Fetched #{length(videos)} videos for \"#{query}\""
     videos
@@ -71,6 +77,12 @@ defmodule IssuesLeaderboard.ThemeCreator do
          # 1-18 seconds in ISO 8601 duration
          Regex.match?(~r/PT([1-9]|1[0-8])S/, duration)
        end)
+  end
+
+  defp serialize(video) do
+    %{
+      url: "https://www.youtube.com/watch?v=#{video["id"]}"
+    }
   end
 
   defp get(url, query, num_results \\ @max_page_size) do
