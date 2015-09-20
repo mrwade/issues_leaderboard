@@ -12,7 +12,11 @@ export default class App extends React.Component {
       .receive("ok", resp => { console.log("Socket opened", resp) })
       .receive("error", resp => { console.log("Unable to open socket", resp) });
 
-    channel.on('rankings', ({ rankings }) => this.setState({ rankings }));
+    channel.on('update', (board) => {
+      console.log('Board update', board);
+      const { rankings } = board;
+      this.setState({ rankings });
+    });
   }
 
   render() {

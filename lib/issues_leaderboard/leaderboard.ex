@@ -6,27 +6,44 @@ defmodule IssuesLeaderboard.Leaderboard do
 
   # API
 
-  def start_link(after_date) do
-    spawn_link(fn -> run_and_schedule(after_date) end)
-    {:ok, _pid} = GenServer.start_link(__MODULE__, nil, name: __MODULE__)
+  def start_link(repo, after_date) do
+    spawn_link(fn -> run_and_schedule(repo, after_date) end)
+    {:ok, _pid} = Agent.start_link(fn -> nil end, name: __MODULE__)
+  end
+
+  def get_rankings do
+    Agent.get(__MODULE__, &(&1))
   end
 
   # Implementation
 
-  def run_and_schedule(after_date) do
-    rankings = run(after_date)
-    leader = rankings |> List.first |> get_in([:user, :username])
-    Logger.info("Leaderboard: Generated rankings. Current leader: #{leader}")
-
-    IssuesLeaderboard.Endpoint.broadcast! "boards:default", "rankings",
-      %{rankings: rankings}
-
-    :timer.sleep(@interval)
-    run_and_schedule(after_date)
+  defp set_rankings(rankings) do
+    Agent.update(__MODULE__, fn _ -> rankings end)
   end
 
-  def run(after_date) do
-    IssuesLeaderboard.IssuesSync.issues(after_date)
+  defp run_and_schedule(repo, after_date) do
+    new_rankings = run(repo, after_date)
+    # leader = new_rankings |> List.first |> get_in([:user, :username])
+    # Logger.info("Leaderboard: Generated rankings. Current leader: #{leader}")
+
+    old_rankings = get_rankings
+    if is_nil(old_rankings) do
+      activities = nil
+    else
+      activities = IssuesLeaderboard.LeaderboardActivities.activities(
+        old_rankings, new_rankings)
+    end
+    set_rankings(new_rankings)
+
+    IssuesLeaderboard.Endpoint.broadcast! "boards:default", "update",
+      %{activities: activities, rankings: new_rankings}
+
+    :timer.sleep(@interval)
+    run_and_schedule(repo, after_date)
+  end
+
+  def run(repo, after_date) do
+    IssuesLeaderboard.IssuesSync.issues(repo, after_date)
     |> Stream.reject(fn issue -> is_nil(issue[:assignee][:username]) end)
     |> Stream.filter(fn issue -> issue[:points] > 0 end)
     |> issues_to_rankings
