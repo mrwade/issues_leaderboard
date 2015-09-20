@@ -7,12 +7,9 @@ defmodule IssuesLeaderboard do
     import Supervisor.Spec, warn: false
 
     children = [
-      # Start the endpoint when the application starts
       supervisor(IssuesLeaderboard.Endpoint, []),
-      # Start the Ecto repository
       worker(IssuesLeaderboard.Repo, []),
-      # Here you could define other workers and supervisors as children
-      worker(IssuesLeaderboard.Leaderboard, ["2015-09-10T00:00:00Z"]),
+      worker(IssuesLeaderboard.DefaultBoard, [])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html

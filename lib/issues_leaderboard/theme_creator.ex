@@ -3,11 +3,26 @@ defmodule IssuesLeaderboard.ThemeCreator do
   @url_base "https://www.googleapis.com/youtube/v3"
   @max_page_size 50
 
+  # API
+
+  def start_link(query) do
+    {:ok, _pid} = Agent.start_link(fn -> find_videos(query) end, name: __MODULE__)
+  end
+
+  def get_videos do
+    Agent.get(__MODULE__, &(&1))
+  end
+
+  # Implementation
+
   def find_videos(query) do
-    search_videos(query)
+    videos = search_videos(query)
     |> video_ids
     |> get_videos
     |> filter_short_videos
+
+    IO.puts "ThemeCreator: Fetched #{length(videos)} videos for \"#{query}\""
+    videos
   end
 
   defp search_videos(query) do
