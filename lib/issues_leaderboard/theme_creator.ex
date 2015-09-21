@@ -10,14 +10,9 @@ defmodule IssuesLeaderboard.ThemeCreator do
     {:ok, _pid} = Agent.start_link(fn -> find_videos(query) end, name: __MODULE__)
   end
 
-  def get_videos do
-    Agent.get(__MODULE__, &(&1))
-  end
+  def get_videos, do: Agent.get(__MODULE__, &(&1))
 
-  def get_random_video do
-    videos = get_videos
-    Enum.at(videos, :random.uniform(length(videos))-1)
-  end
+  def get_video_urls, do: Enum.map(get_videos, &(&1[:url]))
 
   # Implementation
 

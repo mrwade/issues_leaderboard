@@ -1,6 +1,6 @@
 import { Socket } from '../../../../deps/phoenix/web/static/js/phoenix';
 import React from 'react';
-import Activity from './Activity';
+import ActivityPlayer from './ActivityPlayer';
 import styles from './App.scss';
 
 export default class App extends React.Component {
@@ -16,7 +16,7 @@ export default class App extends React.Component {
     channel.on('update', (board) => {
       console.log('Board update', board);
       const { rankings, activities } = board;
-      this.setState({ rankings, activity: activities[0] });
+      this.setState({ rankings, activities });
     });
   }
 
@@ -46,14 +46,8 @@ export default class App extends React.Component {
             </div>
           )}
         </div>
-        {this.renderActivity()}
+        <ActivityPlayer activities={this.state.activities} />
       </div>
     );
-  }
-
-  renderActivity() {
-    if (this.state.activity) {
-      return <Activity activity={this.state.activity} />;
-    }
   }
 }
