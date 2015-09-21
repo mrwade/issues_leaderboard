@@ -13,6 +13,17 @@
   color: #eee;
 }
 
+.title {
+  color: #ccc;
+  font-size: 32px;
+  margin: 30px 15px 15px;
+  text-align: center;
+}
+
+.rankings {
+  padding: 15px 30px;
+}
+
 .ranking {
   display: flex;
   align-items: center;
@@ -51,3 +62,7 @@
 .pointValue3 { background: #FCCB00; color: #332900; }
 .pointValue2 { background: #006B76; }
 .pointValue1 { background: #157AE8; }
+
+.total {
+  font-size: 24px;
+}

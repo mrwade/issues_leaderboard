@@ -3,6 +3,9 @@ import React from 'react';
 import ActivityPlayer from './ActivityPlayer';
 import styles from './App.scss';
 
+const pluralize = (number, singular) =>
+  `${number} ${singular}${number != 1 ? 's' : ''}`;
+
 export default class App extends React.Component {
   componentWillMount() {
     let socket = new Socket('/socket');
@@ -26,7 +29,8 @@ export default class App extends React.Component {
 
     return (
       <div>
-        <div>
+        <div className={styles.title}>Bug Shootout</div>
+        <div className={styles.rankings}>
           {this.state.rankings.map(ranking =>
             <div key={ranking.user.username} className={styles.ranking}>
               <div className={styles.rank}>
@@ -42,6 +46,9 @@ export default class App extends React.Component {
                     {issue.points}
                   </div>
                 )}
+              </div>
+              <div className={styles.total}>
+                {pluralize(ranking.total, 'point')}
               </div>
             </div>
           )}
