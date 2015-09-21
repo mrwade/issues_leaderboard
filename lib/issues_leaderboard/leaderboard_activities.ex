@@ -54,9 +54,8 @@ defmodule IssuesLeaderboard.LeaderboardActivities do
     b_totals = total_points_by_user(b)
 
     map_diff(b_totals, a_totals)
-    |> Stream.filter(fn {username, _} -> Enum.member?(a_usernames, username) end)
     |> Enum.map(fn {username, b_total} ->
-         points_change = b_total - a_totals[username]
+         points_change = b_total - (a_totals[username] || 0)
          data = %{user: users[username], points: abs(points_change)}
          if points_change > 0 do
            {:points_scored,
