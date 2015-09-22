@@ -11,7 +11,7 @@ defmodule IssuesLeaderboard.IssuesSync do
 
   defp fetch_issues(repo, after_date) do
     Tentacat.get("repos/#{repo}/issues", client,
-      [labels: "bug", state: "closed", since: after_date])
+      [labels: "bug", state: "closed", since: after_date, per_page: 100])
     |> Stream.filter(fn issue ->
          DateFormat.parse(issue["closed_at"], "{ISO}") >=
            DateFormat.parse(after_date, "{ISO}")
