@@ -68,8 +68,8 @@ defmodule IssuesLeaderboard.ThemeCreator do
   defp filter_short_videos(videos) do
     videos
     |> Enum.filter(fn %{"contentDetails" => %{"duration" => duration}} ->
-         # 1-18 seconds in ISO 8601 duration
-         Regex.match?(~r/PT([1-9]|1[0-8])S/, duration)
+         # 1-30 seconds in ISO 8601 duration
+         Regex.match?(~r/PT([1-9]|1[0-9]|2[0-9]|30)S/, duration)
        end)
   end
 
