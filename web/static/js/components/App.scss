@@ -13,6 +13,8 @@
   color: #eee;
 }
 
+$media-small-max-width: 600px;
+
 .title {
   color: #ccc;
   font-size: 32px;
@@ -22,17 +24,33 @@
 
 .rankings {
   padding: 15px 30px;
+
+  @media (max-width: $media-small-max-width) {
+    padding: 0;
+  }
 }
 
 .ranking {
   display: flex;
   align-items: center;
   margin: 15px;
+
+  @media (max-width: $media-small-max-width) {
+    flex-wrap: wrap;
+    margin: 15px 0;
+    padding: 5px 10px;
+  }
 }
 
 .rank {
   font-size: 30px;
   margin: 5px;
+  text-align: right;
+
+  @media (max-width: $media-small-max-width) {
+    font-size: 22px;
+    width: 24px;
+  }
 }
 
 .avatar img {
@@ -41,10 +59,32 @@
   height: $size;
   margin: 0 15px;
   width: $size;
+
+  @media (max-width: $media-small-max-width) {
+    $size: 40px;
+    border-radius: $size / 2;
+    height: $size;
+    width: $size;
+  }
 }
 
-.points {
+.username {
+  display: none;
+  font-size: 18px;
+
+  @media (max-width: $media-small-max-width) {
+    display: block;
+  }
+}
+
+.issues {
   flex: 1;
+
+  @media (max-width: $media-small-max-width) {
+    flex: 1 1 100%;
+    order: 3;
+    margin: 4px 0 0 46px;
+  }
 }
 
 .issue {
@@ -54,6 +94,13 @@
   font-size: 50px;
   margin: 7px;
   padding: 0 15px;
+
+  @media (max-width: $media-small-max-width) {
+    border-radius: 5px;
+    font-size: 26px;
+    margin: 3px;
+    padding: 0 8px;
+  }
 }
 
 .pointValue6 { background: #E41813; }
@@ -65,4 +112,10 @@
 
 .total {
   font-size: 24px;
+
+  @media (max-width: $media-small-max-width) {
+    font-size: 16px;
+    flex: 1;
+    text-align: right;
+  }
 }

@@ -39,7 +39,10 @@ export default class App extends React.Component {
               <div className={styles.avatar}>
                 <img src={ranking.user.avatar_url} />
               </div>
-              <div className={styles.points}>
+              <div className={styles.username}>
+                {ranking.user.username}
+              </div>
+              <div className={styles.issues}>
                 {ranking.issues.map(issue =>
                   <div key={issue.number}
                     className={[styles.issue, styles[`pointValue${issue.points}`]].join(' ')}>
