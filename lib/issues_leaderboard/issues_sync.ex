@@ -1,17 +1,17 @@
 defmodule IssuesLeaderboard.IssuesSync do
   use Timex
 
-  def issues(repo, after_date) do
-    fetch_issues(repo, after_date) |> Enum.map(&serialize_issue/1)
+  def issues(%BoardConfig{} = config) do
+    fetch_issues(config) |> Enum.map(&serialize_issue/1)
   end
 
   defp client do
     Tentacat.Client.new(%{access_token: System.get_env("GITHUB_KEY") })
   end
 
-  defp fetch_issues(repo, after_date) do
+  defp fetch_issues(%BoardConfig{repo: repo, label: label, after_date: after_date}) do
     Tentacat.get("repos/#{repo}/issues", client,
-      [labels: "bug", state: "closed", since: after_date, per_page: 100])
+      [labels: label, state: "closed", since: after_date, per_page: 100])
     |> Stream.filter(fn issue ->
          DateFormat.parse(issue["closed_at"], "{ISO}") >=
            DateFormat.parse(after_date, "{ISO}")

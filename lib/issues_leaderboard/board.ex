@@ -8,7 +8,10 @@ defmodule IssuesLeaderboard.Board do
   def init({after_date, theme_query}) do
     child_processes = [
       worker(IssuesLeaderboard.Leaderboard,
-        [System.get_env("GITHUB_REPO"), after_date]),
+        [%BoardConfig{
+           repo: System.get_env("GITHUB_REPO"),
+           label: System.get_env("GITHUB_LABEL"),
+           after_date: after_date}]),
       worker(IssuesLeaderboard.ThemeCreator, [theme_query])
     ]
     supervise child_processes, strategy: :one_for_one

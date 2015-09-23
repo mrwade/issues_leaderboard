@@ -6,8 +6,8 @@ defmodule IssuesLeaderboard.Leaderboard do
 
   # API
 
-  def start_link(repo, after_date) do
-    spawn_link(fn -> run_and_schedule(repo, after_date) end)
+  def start_link(%BoardConfig{} = config) do
+    spawn_link(fn -> run_and_schedule(config) end)
     {:ok, _pid} = Agent.start_link(fn -> nil end, name: __MODULE__)
   end
 
@@ -21,8 +21,8 @@ defmodule IssuesLeaderboard.Leaderboard do
     Agent.update(__MODULE__, fn _ -> rankings end)
   end
 
-  defp run_and_schedule(repo, after_date) do
-    new_rankings = run(repo, after_date)
+  defp run_and_schedule(%BoardConfig{} = config) do
+    new_rankings = run(config)
     # leader = new_rankings |> List.first |> get_in([:user, :username])
     # Logger.info("Leaderboard: Generated rankings. Current leader: #{leader}")
 
@@ -39,11 +39,11 @@ defmodule IssuesLeaderboard.Leaderboard do
       %{activities: activities, rankings: new_rankings}
 
     :timer.sleep(@interval)
-    run_and_schedule(repo, after_date)
+    run_and_schedule(config)
   end
 
-  def run(repo, after_date) do
-    IssuesLeaderboard.IssuesSync.issues(repo, after_date)
+  def run(%BoardConfig{} = config) do
+    IssuesLeaderboard.IssuesSync.issues(config)
     |> Stream.reject(fn issue -> is_nil(issue[:assignee][:username]) end)
     |> Stream.filter(fn issue -> issue[:points] > 0 end)
     |> issues_to_rankings
